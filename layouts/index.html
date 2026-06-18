@@ -4,30 +4,32 @@
 {{ $s := $hp.hero_subtitle | default "" }}
 {{ $img := $hp.hero_image | default "" }}
 <style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
 .hero-wrapper {
     position: relative;
-    width: 100%;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    height: 100vh;
+    overflow: hidden;
 }
 .hero-fs {
-    position: relative;
-    width: 100%;
-    height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-}
-.hero-fs::before {
-    content: ''; position: absolute; inset: 0;
+    position: absolute;
+    inset: 0;
     {{ if $img }}background: url('{{ $img }}') center/cover no-repeat;{{ else }}background: linear-gradient(135deg, #667eea, #764ba2);{{ end }}
     z-index: 0;
 }
-.hero-fs::after {
-    content: ''; position: absolute; inset: 0;
-    background: rgba(0,0,0,.35); z-index: 1;
-}
+/* 不要整图压暗蒙版，已删除 ::after */
+
 .hero-c {
-    position: relative; z-index: 2; padding: 20px; max-width: 800px;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    text-align: center;
+    padding: 20px;
+    max-width: 800px;
+    width: 100%;
 }
 .hero-c h1 {
     font-size: clamp(2.5rem,6vw,4.5rem); font-weight: 700; margin-bottom: 16px;
@@ -47,13 +49,13 @@
     50% { transform: translateX(-50%) translateY(8px); }
 }
 
-/* === 全屏渐变过渡层 === */
+/* === 渐变层：贴在 hero 底部，覆盖图片底部 35% 区域 === */
 .hero-gradient {
-    display: block;
-    position: relative;
-    width: 100vw;
-    height: 30vh;
-    margin-left: calc(-50vw + 50%);
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 35%;
     background: linear-gradient(
         to bottom,
         rgba(255,255,255,0) 0%,
@@ -70,12 +72,12 @@
     );
 }
 
-/* === 文章列表区域 === */
+/* === 文章列表 === */
 .ps {
     width: 100vw;
     margin-left: calc(-50vw + 50%);
-    padding: 0 20px 60px;
-    background: rgba(255,255,255,1);
+    padding: 40px 20px 60px;
+    background: #fff;
 }
 [data-scheme="dark"] .ps {
     background: rgba(20,20,30,1);
@@ -110,14 +112,13 @@
 </style>
 
 <div class="hero-wrapper">
-    <div class="hero-fs">
-        <div class="hero-c">
-            <h1>{{ $t }}</h1>
-            {{ if $s }}<p>{{ $s }}</p>{{ end }}
-        </div>
-        <div class="hero-sc">↓ 向下滚动</div>
+    <div class="hero-fs"></div>
+    <div class="hero-c">
+        <h1>{{ $t }}</h1>
+        {{ if $s }}<p>{{ $s }}</p>{{ end }}
     </div>
     <div class="hero-gradient"></div>
+    <div class="hero-sc">↓ 向下滚动</div>
 </div>
 
 <div class="ps">
@@ -129,11 +130,7 @@
                 <div class="t">{{ .Title }}</div>
                 <div class="m">
                     <span>{{ .Date.Format "2006-01-02" }}</span>
-                    {{ with .Params.categories }}
-                        {{ range . }}
-                        <span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;background:rgba(224,122,95,.1);color:var(--accent)">{{ . }}</span>
-                        {{ end }}
-                    {{ end }}
+                    {{ with .Params.categories }}{{ range . }}<span style="display:inline-block;padding:2px 10px;border-radius:12px;font-size:12px;background:rgba(224,122,95,.1);color:var(--accent)">{{ . }}</span>{{ end }}{{ end }}
                 </div>
                 <div class="s">{{ .Summary | plainify | truncate 150 }}</div>
             </a>
