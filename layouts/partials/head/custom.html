@@ -1,0 +1,20 @@
+{{- with .Site.Data.homepage.site_bg -}}
+<style>
+html {
+    background: url('{{ . }}') center/cover fixed no-repeat !important;
+    min-height: 100%;
+}
+body {
+    background: transparent !important;
+}
+/* 在 body 上覆盖一层半透明遮罩，内容卡片保持原有白色背景 */
+body::before {
+    content: '';
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(255, 255, 255, .88);
+    z-index: -1;
+    pointer-events: none;
+}
+</style>
+{{- end -}}
