@@ -1,20 +1,49 @@
 {{- with .Site.Data.homepage.site_bg -}}
+<style>body{background:url('{{ . }}')center/cover fixed no-repeat!important}</style>
+{{- end -}}
 <style>
-html {
-    background: url('{{ . }}') center/cover fixed no-repeat !important;
-    min-height: 100%;
+:root {
+    --accent:#e07a5f;--accent-hover:#c96a4f;--text-primary:#2d2d2d;--text-secondary:#6b7280;
+    --bg-overlay:rgba(255,255,255,.75);--border-color:rgba(0,0,0,.06);--card-shadow:0 1px 4px rgba(0,0,0,.04);
+    --nav-bg:rgba(255,255,255,.72);--radius-md:12px;scroll-behavior:smooth;
 }
-body {
-    background: transparent !important;
+[data-scheme="dark"] {
+    --text-primary:#e5e7eb;--text-secondary:#9ca3af;--bg-overlay:rgba(20,20,30,.78);
+    --border-color:rgba(255,255,255,.06);--card-shadow:0 1px 4px rgba(0,0,0,.2);
+    --nav-bg:rgba(20,20,30,.78);
 }
-/* 在 body 上覆盖一层半透明遮罩，内容卡片保持原有白色背景 */
-body::before {
-    content: '';
-    position: fixed;
-    top: 0; left: 0; right: 0; bottom: 0;
-    background: rgba(255, 255, 255, .88);
-    z-index: -1;
-    pointer-events: none;
+*{box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:var(--text-primary);background-color:transparent!important;min-height:100vh;line-height:1.7;-webkit-font-smoothing:antialiased}
+.custom-navbar{position:fixed;top:0;left:0;right:0;z-index:1000;background:var(--nav-bg);backdrop-filter:blur(16px) saturate(1.2);-webkit-backdrop-filter:blur(16px) saturate(1.2);border-bottom:1px solid var(--border-color);transition:box-shadow .3s}
+.custom-navbar.scrolled{box-shadow:0 1px 12px rgba(0,0,0,.06)}
+.nav-inner{max-width:1100px;margin:0 auto;padding:0 24px;height:60px;display:flex;align-items:center;justify-content:space-between}
+.nav-brand{font-size:18px;font-weight:700;color:var(--text-primary);text-decoration:none}
+.nav-links{display:flex;align-items:center;gap:4px}
+.nav-links a{padding:6px 14px;font-size:14px;font-weight:500;color:var(--text-secondary);text-decoration:none;border-radius:6px;transition:all .2s}
+.nav-links a:hover{color:var(--accent);background:rgba(224,122,95,.08)}
+.nav-theme-btn{background:none;border:none;font-size:18px;cursor:pointer;padding:6px 10px;border-radius:6px}
+.nav-hamburger{display:none;background:none;border:none;font-size:22px;cursor:pointer;color:var(--text-primary)}
+@media(max-width:768px){
+.nav-links{display:none;position:fixed;top:60px;left:0;right:0;background:var(--nav-bg);backdrop-filter:blur(16px);flex-direction:column;padding:16px;border-bottom:1px solid var(--border-color)}
+.nav-links.open{display:flex}
+.nav-links a{padding:12px 16px;width:100%}
+.nav-hamburger{display:block}
+}
+.custom-main{padding-top:60px;max-width:100%;min-height:100vh}
+.sidebar,.left-sidebar,.right-sidebar{display:none!important}
+.container.main-container{max-width:900px!important;margin:0 auto!important;padding:0 20px!important;background:var(--bg-overlay)!important;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:var(--radius-md);margin-top:24px!important;margin-bottom:24px!important}
+body:not(.article-page) .container.main-container{padding:20px 24px!important}
+.article-list .article-item,.article-list .article-card{background:transparent!important;box-shadow:none!important;border:none!important;border-bottom:1px solid var(--border-color)!important;padding:20px 0!important;border-radius:0!important}
+.article-page .container.main-container{background:transparent!important;backdrop-filter:none!important;max-width:800px!important}
+.article-page .article-header,.article-page .article-content,.article-page .article-footer{background:var(--bg-overlay)!important;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-radius:var(--radius-md);padding:24px 28px!important;margin-bottom:20px;box-shadow:var(--card-shadow)}
+h1,h2,h3,h4{font-weight:600;line-height:1.4}
+a{color:var(--accent);text-decoration:none}
+a:hover{color:var(--accent-hover)}
+.footer{text-align:center;padding:32px 20px!important;color:var(--text-secondary);font-size:13px;background:var(--bg-overlay)!important;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);margin-top:24px}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+.custom-main>*{animation:fadeUp .5s ease-out both}
+@media(max-width:768px){
+.container.main-container{padding:0 12px!important}
+.article-page .article-header,.article-page .article-content,.article-page .article-footer{padding:16px!important}
 }
 </style>
-{{- end -}}
