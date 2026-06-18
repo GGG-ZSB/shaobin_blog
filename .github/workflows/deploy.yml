@@ -30,3 +30,4 @@ jobs:
           chmod 600 ~/.ssh/id_ed25519
           ssh-keyscan -H ${{ secrets.DEPLOY_HOST }} >> ~/.ssh/known_hosts
           rsync -avz --delete ./public/ ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:/var/www/shaobin-blog/public/
+          ssh ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "chown -R root:root /var/www/shaobin-blog/public/ && chmod -R 755 /var/www/shaobin-blog/public/ && find /var/www/shaobin-blog/public/ -type f -exec chmod 644 {} \;"
