@@ -1,0 +1,84 @@
+{{ define "main" }}
+{{ $homepage := .Site.Data.homepage }}
+{{ $heroTitle := $homepage.hero_title | default "Hi, welcome" }}
+{{ $heroSubtitle := $homepage.hero_subtitle | default "" }}
+{{ $heroImage := $homepage.hero_image | default "" }}
+{{ $showPosts := $homepage.show_latest_posts | default true }}
+
+<style>
+.hero-section {
+  position: relative;
+  padding: 80px 20px;
+  text-align: center;
+  overflow: hidden;
+  {{ if $heroImage }}
+  background: linear-gradient(rgba(0,0,0,.5), rgba(0,0,0,.5)), url('{{ $heroImage }}') center/cover no-repeat;
+  color: #fff;
+  {{ else }}
+  background: linear-gradient(135deg, #1a73e8 0%, #34a853 100%);
+  color: #fff;
+  {{ end }}
+}
+.hero-section h1 {
+  font-size: 48px;
+  font-weight: 700;
+  margin-bottom: 16px;
+  letter-spacing: -1px;
+}
+.hero-section p {
+  font-size: 20px;
+  opacity: .9;
+  max-width: 600px;
+  margin: 0 auto;
+  line-height: 1.6;
+}
+@media (max-width: 768px) {
+  .hero-section { padding: 50px 16px; }
+  .hero-section h1 { font-size: 32px; }
+  .hero-section p { font-size: 16px; }
+}
+.container { max-width: 1200px; margin: 0 auto; padding: 24px 16px; }
+.section-title { font-size: 24px; font-weight: 600; margin-bottom: 24px; color: #333; }
+.posts-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 20px; }
+.post-card { background: #fff; border-radius: 10px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.08); transition: transform .2s, box-shadow .2s; }
+.post-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,.12); }
+.post-card-body { padding: 20px; }
+.post-card-title { font-size: 18px; font-weight: 600; margin-bottom: 8px; }
+.post-card-title a { color: #333; text-decoration: none; }
+.post-card-title a:hover { color: #1a73e8; }
+.post-card-meta { font-size: 13px; color: #888; margin-bottom: 8px; }
+.post-card-summary { font-size: 14px; color: #555; line-height: 1.6; }
+.view-all { text-align: center; margin-top: 32px; }
+.view-all a { display: inline-block; padding: 10px 24px; background: #1a73e8; color: #fff; border-radius: 6px; text-decoration: none; font-size: 14px; transition: background .2s; }
+.view-all a:hover { background: #1557b0; }
+</style>
+
+<div class="hero-section">
+  <h1>{{ $heroTitle }}</h1>
+  {{ if $heroSubtitle }}<p>{{ $heroSubtitle }}</p>{{ end }}
+</div>
+
+{{ if $showPosts }}
+<div class="container">
+  <div class="section-title">最新文章</div>
+  <div class="posts-grid">
+    {{ $pages := where .Site.RegularPages "Section" "post" }}
+    {{ $latestPosts := first 6 $pages }}
+    {{ range $latestPosts }}
+    <div class="post-card">
+      <div class="post-card-body">
+        <div class="post-card-title"><a href="{{ .RelPermalink }}">{{ .Title }}</a></div>
+        <div class="post-card-meta">{{ .Date.Format "2006-01-02" }}</div>
+        <div class="post-card-summary">{{ .Summary | plainify | truncate 120 }}</div>
+      </div>
+    </div>
+    {{ end }}
+  </div>
+  {{ if gt (len $pages) 6 }}
+  <div class="view-all">
+    <a href="/post/">查看全部文章 →</a>
+  </div>
+  {{ end }}
+</div>
+{{ end }}
+{{ end }}

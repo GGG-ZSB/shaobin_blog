@@ -6,209 +6,415 @@
 <title>博客后台</title>
 <style>
 * { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; }
-.container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f0f2f5; color: #333; }
+.container { max-width: 1100px; margin: 0 auto; padding: 20px; }
 .hidden { display: none !important; }
-h1 { font-size: 24px; margin-bottom: 20px; }
-.btn { display: inline-block; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
+h1 { font-size: 22px; margin-bottom: 16px; }
+h2 { font-size: 18px; margin-bottom: 12px; }
+.btn { display: inline-block; padding: 8px 18px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 500; transition: all .2s; }
+.btn:disabled { opacity: .6; cursor: not-allowed; }
 .btn-primary { background: #1a73e8; color: #fff; }
-.btn-primary:hover { background: #1557b0; }
+.btn-primary:hover:not(:disabled) { background: #1557b0; }
 .btn-danger { background: #dc3545; color: #fff; }
+.btn-danger:hover:not(:disabled) { background: #b02a37; }
 .btn-secondary { background: #6c757d; color: #fff; }
-input, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
-textarea { min-height: 500px; font-family: "SFMono-Regular", Consolas, monospace; line-height: 1.6; }
-.card { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
-.post-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; cursor: pointer; }
-.post-item:hover { color: #1a73e8; }
+.btn-success { background: #28a745; color: #fff; }
+.btn-sm { padding: 4px 12px; font-size: 12px; }
+input, textarea, select { width: 100%; padding: 10px 12px; border: 1px solid #d9d9d9; border-radius: 6px; font-size: 14px; transition: border .2s; }
+input:focus, textarea:focus, select:focus { outline: none; border-color: #1a73e8; box-shadow: 0 0 0 2px rgba(26,115,232,.15); }
+textarea { min-height: 400px; font-family: "SFMono-Regular", Consolas, monospace; line-height: 1.7; resize: vertical; }
+.card { background: #fff; border-radius: 10px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
+.card + .card { margin-top: 16px; }
+
+/* Tabs */
+.tabs { display: flex; gap: 0; background: #fff; border-radius: 10px 10px 0 0; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.08); margin-bottom: 16px; }
+.tab { padding: 14px 24px; cursor: pointer; font-size: 14px; font-weight: 500; color: #666; border-bottom: 3px solid transparent; transition: all .2s; user-select: none; }
+.tab:hover { color: #1a73e8; background: #f5f8ff; }
+.tab.active { color: #1a73e8; border-bottom-color: #1a73e8; }
+
+/* Post list */
+.post-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #f0f0f0; }
 .post-item:last-child { border-bottom: none; }
-.post-title { font-size: 16px; }
-.post-date { font-size: 12px; color: #999; }
-.toolbar { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
-.login-box { max-width: 400px; margin: 100px auto; }
-.login-box input { margin-bottom: 12px; }
+.post-item .info { flex: 1; cursor: pointer; }
+.post-item .info:hover .ptitle { color: #1a73e8; }
+.ptitle { font-size: 15px; transition: color .2s; }
+.pmeta { font-size: 12px; color: #999; margin-top: 3px; display: flex; gap: 8px; flex-wrap: wrap; }
+.tag { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 11px; background: #e8f0fe; color: #1967d2; }
+
+/* Category */
+.cat-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
+.cat-item:last-child { border-bottom: none; }
+
+/* Gallery */
+.gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
+.gallery-item { position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 1; background: #f5f5f5; }
+.gallery-item img { width: 100%; height: 100%; object-fit: cover; }
+.gallery-item .gdel { position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,.6); color: #fff; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-size: 16px; line-height: 28px; text-align: center; opacity: 0; transition: opacity .2s; }
+.gallery-item:hover .gdel { opacity: 1; }
+
+/* Login */
+.login-box { max-width: 380px; margin: 80px auto; }
+.login-box input { margin-bottom: 14px; }
 .login-box .error { color: #dc3545; font-size: 13px; margin-top: 8px; }
-.editor-header input { font-size: 20px; font-weight: bold; margin-bottom: 12px; border: none; border-bottom: 2px solid #1a73e8; border-radius: 0; padding: 8px 0; }
-.toast { position: fixed; top: 20px; right: 20px; background: #28a745; color: #fff; padding: 12px 20px; border-radius: 8px; z-index: 999; }
+
+/* Toolbar */
+.toolbar { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
+.etitle input { font-size: 20px; font-weight: 600; margin-bottom: 14px; border: none; border-bottom: 2px solid #1a73e8; border-radius: 0; padding: 8px 0; }
+
+/* Toast */
+.toast { position: fixed; top: 20px; right: 20px; background: #28a745; color: #fff; padding: 12px 24px; border-radius: 8px; z-index: 999; font-size: 14px; box-shadow: 0 4px 12px rgba(0,0,0,.15); }
 .toast.error { background: #dc3545; }
+
+/* Upload area */
+.upload-area { border: 2px dashed #d9d9d9; border-radius: 8px; padding: 30px; text-align: center; cursor: pointer; transition: all .2s; margin-bottom: 16px; }
+.upload-area:hover { border-color: #1a73e8; background: #f5f8ff; }
+.upload-area input[type="file"] { display: none; }
+
+/* Homepage editor */
+.hp-field { margin-bottom: 14px; }
+.hp-field label { display: block; font-size: 13px; font-weight: 500; color: #555; margin-bottom: 4px; }
+.hp-preview { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; background: #f0f0f0; }
+
+/* Category multi-select */
+.cat-select { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 14px; }
+.cat-chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border-radius: 14px; font-size: 13px; cursor: pointer; border: 1px solid #d9d9d9; transition: all .2s; user-select: none; }
+.cat-chip:hover { border-color: #1a73e8; }
+.cat-chip.selected { background: #1a73e8; color: #fff; border-color: #1a73e8; }
 </style>
 </head>
 <body>
 <div class="container">
 
-<div id="login-view" class="login-box card">
-  <h1>登录</h1>
-  <p style="color:#666;font-size:13px;margin-bottom:12px;">输入你的 GitHub Personal Access Token</p>
+<!-- Login -->
+<div id="login-view" class="card login-box">
+  <h1>登录后台</h1>
+  <p style="color:#666;font-size:13px;margin-bottom:14px;">输入 GitHub Personal Access Token</p>
   <input type="password" id="pat-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
-  <button class="btn btn-primary" onclick="login()">登录</button>
+  <button class="btn btn-primary" onclick="login()" style="width:100%">登录</button>
   <div id="login-error" class="error hidden"></div>
 </div>
 
+<!-- Main -->
 <div id="main-view" class="hidden">
-  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
-    <h1>文章管理</h1>
-    <div>
-      <button class="btn btn-primary" onclick="newPost()">+ 新建文章</button>
-      <button class="btn btn-secondary" onclick="logout()">登出</button>
+  <!-- Tabs -->
+  <div class="tabs">
+    <div class="tab active" data-tab="posts" onclick="switchTab('posts')">📝 文章</div>
+    <div class="tab" data-tab="categories" onclick="switchTab('categories')">📂 分类</div>
+    <div class="tab" data-tab="gallery" onclick="switchTab('gallery')">🖼️ 相册</div>
+    <div class="tab" data-tab="homepage" onclick="switchTab('homepage')">🏠 首页</div>
+    <div class="tab" onclick="logout()" style="margin-left:auto;color:#dc3545;">登出</div>
+  </div>
+
+  <!-- === POSTS TAB === -->
+  <div id="tab-posts" class="tab-content">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+        <h1>文章管理</h1>
+        <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <label class="btn btn-success btn-sm" style="cursor:pointer;">📄 上传文档<input type="file" accept=".md" onchange="uploadDoc(this)" style="display:none;"></label>
+          <button class="btn btn-primary" onclick="newPost()">+ 新建文章</button>
+        </div>
+      </div>
+      <div id="post-list"></div>
     </div>
   </div>
 
-  <div id="post-list" class="card"></div>
+  <!-- === CATEGORIES TAB === -->
+  <div id="tab-categories" class="tab-content hidden">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+        <h1>分类管理</h1>
+        <div style="display:flex;gap:8px;">
+          <input id="new-cat-input" placeholder="输入新分类名称" style="width:200px;">
+          <button class="btn btn-primary" onclick="addCategory()">添加</button>
+        </div>
+      </div>
+      <p style="font-size:13px;color:#888;margin-bottom:12px;">分类会同步到 GitHub 并显示在博客上。写文章时可以选择分类。</p>
+      <div id="cat-list"></div>
+    </div>
+  </div>
 
-  <div id="editor-view" class="hidden card">
+  <!-- === GALLERY TAB === -->
+  <div id="tab-gallery" class="tab-content hidden">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
+        <h1>相册管理</h1>
+        <div style="display:flex;gap:8px;align-items:center;">
+          <label style="cursor:pointer;display:flex;align-items:center;gap:4px;font-size:13px;color:#555;">
+            <input type="checkbox" id="gallery-toggle" onchange="toggleGallery()"> 启用相册页面
+          </label>
+          <a id="gallery-link" href="/gallery" target="_blank" style="font-size:13px;display:none;">查看相册 →</a>
+        </div>
+      </div>
+      <div class="upload-area" onclick="document.getElementById('gallery-upload').click()">
+        <p style="font-size:15px;color:#999;">🖼️ 点击上传图片到相册</p>
+        <p style="font-size:12px;color:#bbb;margin-top:4px;">支持 PNG / JPG / WebP / GIF</p>
+        <input type="file" id="gallery-upload" accept="image/*" multiple onchange="uploadGalleryImages(this)">
+      </div>
+      <div id="gallery-grid" class="gallery-grid"></div>
+    </div>
+  </div>
+
+  <!-- === HOMEPAGE TAB === -->
+  <div id="tab-homepage" class="tab-content hidden">
+    <div class="card">
+      <h1>首页设置</h1>
+      <p style="font-size:13px;color:#888;margin-bottom:16px;">自定义博客首页的封面区域。</p>
+      <div class="hp-field">
+        <label>封面标题</label>
+        <input id="hp-title" placeholder="例如: Hi, I'm Shaobin">
+      </div>
+      <div class="hp-field">
+        <label>封面副标题</label>
+        <input id="hp-subtitle" placeholder="例如: 记录技术成长与生活思考">
+      </div>
+      <div class="hp-field">
+        <label>背景图片 URL</label>
+        <input id="hp-image" placeholder="留空使用默认纯色背景，或输入 /img/xxx.jpg">
+      </div>
+      <label style="display:flex;align-items:center;gap:8px;font-size:14px;margin-bottom:16px;">
+        <input type="checkbox" id="hp-show-posts" checked> 在封面下方显示最新文章列表
+      </label>
+      <div style="display:flex;gap:8px;">
+        <button class="btn btn-primary" onclick="saveHomepage()">保存首页设置</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- === EDITOR OVERLAY === -->
+  <div id="editor-view" class="hidden card" style="margin-top:0;">
     <div class="toolbar">
       <button class="btn btn-secondary" onclick="backToList()">← 返回</button>
-      <button class="btn btn-primary" onclick="savePost()">保存并发布</button>
+      <button class="btn btn-primary" onclick="savePost()">💾 保存并发布</button>
+      <label class="btn btn-secondary btn-sm" style="cursor:pointer;">🖼️ 上传图片<input type="file" accept="image/*" onchange="uploadImage(this)" style="display:none;"></label>
     </div>
-    <div class="editor-header">
-      <input type="text" id="post-title" placeholder="文章标题">
+    <div class="etitle"><input type="text" id="post-title" placeholder="文章标题"></div>
+    <div style="margin-bottom:12px;">
+      <label style="font-size:13px;font-weight:500;color:#555;display:block;margin-bottom:4px;">分类</label>
+      <div id="editor-cats" class="cat-select"></div>
     </div>
     <textarea id="post-content" placeholder="在此写 Markdown 内容..."></textarea>
     <input type="hidden" id="post-slug">
   </div>
 </div>
 
-</div>
-
 <script>
-let currentToken = "";
-let currentPosts = [];
+let token = "";
+let allPosts = [];
+let allCats = [];
+let selectedCats = [];
 
-function showToast(msg, isError = false) {
-  const t = document.createElement("div");
-  t.className = "toast" + (isError ? " error" : "");
-  t.textContent = msg;
-  document.body.appendChild(t);
-  setTimeout(() => t.remove(), 3000);
-}
+function toast(msg, err) { const t = document.createElement("div"); t.className = "toast" + (err?" error":""); t.textContent = msg; document.body.appendChild(t); setTimeout(()=>t.remove(),3000); }
 
+// === AUTH ===
 async function login() {
-  const token = document.getElementById("pat-input").value.trim();
-  if (!token) return;
+  const t = document.getElementById("pat-input").value.trim(); if (!t) return;
   document.getElementById("login-error").classList.add("hidden");
-  try {
-    const r = await fetch("/api/auth", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ token }),
-    });
-    const data = await r.json();
-    if (data.ok) {
-      currentToken = token;
-      document.getElementById("login-view").classList.add("hidden");
-      document.getElementById("main-view").classList.remove("hidden");
-      loadPosts();
-    } else {
-      document.getElementById("login-error").textContent = "Token 验证失败，请检查";
-      document.getElementById("login-error").classList.remove("hidden");
-    }
-  } catch(e) {
-    document.getElementById("login-error").textContent = "连接失败：" + e.message;
-    document.getElementById("login-error").classList.remove("hidden");
-  }
+  try { const r = await fetch("/api/auth", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({token:t}) }); const d = await r.json();
+    if (d.ok) { token = t; document.getElementById("login-view").classList.add("hidden"); document.getElementById("main-view").classList.remove("hidden"); loadAll(); }
+    else { document.getElementById("login-error").textContent = "Token 验证失败"; document.getElementById("login-error").classList.remove("hidden"); }
+  } catch(e) { document.getElementById("login-error").textContent = "连接失败：" + e.message; document.getElementById("login-error").classList.remove("hidden"); }
+}
+function logout() { token = ""; document.getElementById("login-view").classList.remove("hidden"); document.getElementById("main-view").classList.add("hidden"); document.getElementById("editor-view").classList.add("hidden"); }
+
+// === TAB ===
+function switchTab(name) {
+  document.querySelectorAll(".tab").forEach(t => t.classList.toggle("active", t.dataset.tab === name));
+  document.querySelectorAll(".tab-content").forEach(t => t.classList.add("hidden"));
+  const el = document.getElementById("tab-" + name); if (el) el.classList.remove("hidden");
+  if (name === "categories") loadCategories();
+  if (name === "gallery") loadGallery();
+  if (name === "homepage") loadHomepage();
 }
 
-function logout() {
-  currentToken = "";
-  currentPosts = [];
-  document.getElementById("login-view").classList.remove("hidden");
-  document.getElementById("main-view").classList.add("hidden");
-  document.getElementById("editor-view").classList.add("hidden");
-  document.getElementById("post-list").innerHTML = "";
-  document.getElementById("pat-input").value = "";
-}
+function loadAll() { loadPosts(); loadCategories(); loadGallery(); loadHomepage(); }
 
+// === POSTS ===
 async function loadPosts() {
-  try {
-    const r = await fetch("/api/posts");
-    const data = await r.json();
-    currentPosts = data.posts || [];
-    renderPostList();
-  } catch(e) {
-    showToast("加载失败：" + e.message, true);
-  }
+  try { const r = await fetch("/api/posts"); const d = await r.json(); allPosts = d.posts || []; renderPosts(); }
+  catch(e) { toast("加载文章失败", true); }
 }
-
-function renderPostList() {
-  const list = document.getElementById("post-list");
-  if (currentPosts.length === 0) {
-    list.innerHTML = '<p style="color:#999;text-align:center;padding:20px;">还没有文章，点击"新建文章"开始写</p>';
-    return;
-  }
-  list.innerHTML = currentPosts.map(p => `
-    <div class="post-item" onclick="editPost('${p.slug}')">
-      <div>
-        <div class="post-title">${p.title}</div>
-        <div class="post-date">${p.date || ''}</div>
+function renderPosts() {
+  const el = document.getElementById("post-list");
+  if (!allPosts.length) { el.innerHTML = '<p style="color:#999;text-align:center;padding:20px;">还没有文章，点击"新建文章"开始写</p>'; return; }
+  el.innerHTML = allPosts.map(p => `<div class="post-item">
+    <div class="info" onclick="editPost('${p.slug}')">
+      <div class="ptitle">${p.title}</div>
+      <div class="pmeta">
+        <span>${p.date||''}</span>
+        ${(p.categories||[]).map(c => `<span class="tag">${c}</span>`).join('')}
       </div>
-      <span style="color:#999;font-size:12px;">${p.slug}.md</span>
     </div>
-  `).join("");
+    <button class="btn btn-danger btn-sm" onclick="deletePost('${p.slug}')">🗑️</button>
+  </div>`).join("");
 }
 
 function newPost() {
-  document.getElementById("post-slug").value = "";
-  document.getElementById("post-title").value = "";
-  document.getElementById("post-content").value = "";
-  document.getElementById("editor-view").classList.remove("hidden");
-  document.getElementById("post-list").parentElement.classList.add("hidden");
+  document.getElementById("post-slug").value = ""; document.getElementById("post-title").value = ""; document.getElementById("post-content").value = ""; selectedCats = [];
+  document.getElementById("tab-posts").classList.add("hidden"); document.getElementById("editor-view").classList.remove("hidden");
+  renderEditorCats();
 }
 
 async function editPost(slug) {
-  try {
-    const r = await fetch(`/api/posts/${slug}`);
-    const data = await r.json();
-    const content = data.content;
-    const titleMatch = content.match(/^title:\s*["']?(.+?)["']?\s*$/m);
-    const bodyStart = content.indexOf("\n---\n", content.indexOf("---") + 4);
-    const body = bodyStart > 0 ? content.substring(bodyStart + 5) : content;
+  try { const r = await fetch(`/api/posts/${slug}`); const d = await r.json();
+    const t = d.content.match(/^title:\s*["']?(.+?)["']?\s*$/m);
+    const cm = d.content.match(/^categories:\s*\[([\s\S]*?)\]\s*$/m);
+    const bs = d.content.indexOf("\n---\n", d.content.indexOf("---")+4);
     document.getElementById("post-slug").value = slug;
-    document.getElementById("post-title").value = titleMatch ? titleMatch[1] : slug;
-    document.getElementById("post-content").value = body.trim();
-    document.getElementById("editor-view").classList.remove("hidden");
-    document.getElementById("post-list").parentElement.classList.add("hidden");
-  } catch(e) {
-    showToast("加载失败：" + e.message, true);
-  }
+    document.getElementById("post-title").value = t ? t[1].trim() : slug;
+    document.getElementById("post-content").value = (bs > 0 ? d.content.substring(bs+5) : d.content).trim();
+    selectedCats = [];
+    if (cm) { selectedCats = cm[1].split(",").map(c => c.trim().replace(/^["']|["']$/g,"")).filter(Boolean); }
+    document.getElementById("tab-posts").classList.add("hidden"); document.getElementById("editor-view").classList.remove("hidden");
+    renderEditorCats();
+  } catch(e) { toast("加载失败：" + e.message, true); }
+}
+
+function renderEditorCats() {
+  const el = document.getElementById("editor-cats");
+  el.innerHTML = allCats.map(c => `<span class="cat-chip${selectedCats.includes(c.name)?" selected":""}" onclick="toggleEditorCat('${c.name}')">${c.name}</span>`).join("");
+  if (!allCats.length) el.innerHTML = '<span style="font-size:13px;color:#999;">还没有分类，去"分类"标签页添加</span>';
+}
+function toggleEditorCat(name) {
+  const i = selectedCats.indexOf(name);
+  if (i >= 0) selectedCats.splice(i,1); else selectedCats.push(name);
+  renderEditorCats();
 }
 
 async function savePost() {
   const title = document.getElementById("post-title").value.trim();
   const content = document.getElementById("post-content").value.trim();
   let slug = document.getElementById("post-slug").value.trim();
-
-  if (!title || !content) { showToast("标题和内容不能为空", true); return; }
-
-  if (!slug) {
-    slug = title.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-").replace(/^-|-$/g, "") || "post";
-  }
-
-  const btn = document.querySelector("#editor-view .btn-primary");
-  btn.textContent = "保存中...";
-  btn.disabled = true;
-
+  if (!title || !content) { toast("标题和内容不能为空", true); return; }
+  if (!slug) slug = title.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]+/g,"-").replace(/^-|-$/g,"")||"post";
+  const btn = document.querySelector("#editor-view .btn-primary"); btn.textContent = "保存中..."; btn.disabled = true;
   try {
-    const r = await fetch("/api/posts/save", {
-      method: "POST", headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ slug, title, content, token: currentToken }),
-    });
-    const data = await r.json();
-    if (data.ok) {
-      showToast("文章已保存并发布！");
-      backToList();
-      loadPosts();
-    } else {
-      showToast("保存失败：" + (data.error || "未知错误"), true);
-    }
-  } catch(e) {
-    showToast("保存失败：" + e.message, true);
-  } finally {
-    btn.textContent = "保存并发布";
-    btn.disabled = false;
-  }
+    const r = await fetch("/api/posts/save", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({slug,title,content,categories:selectedCats}) });
+    const d = await r.json();
+    if (d.ok) { toast("已保存并发布！"); backToList(); loadPosts(); }
+    else toast("保存失败：" + (d.error||"未知错误"), true);
+  } catch(e) { toast("保存失败："+e.message, true); }
+  finally { btn.textContent = "保存并发布"; btn.disabled = false; }
 }
 
-function backToList() {
-  document.getElementById("editor-view").classList.add("hidden");
-  document.getElementById("post-list").parentElement.classList.remove("hidden");
+async function deletePost(slug) {
+  if (!confirm("确定删除这篇？")) return;
+  try { const r = await fetch(`/api/posts/${slug}`,{method:"DELETE"}); const d = await r.json();
+    if (d.ok) { toast("已删除"); loadPosts(); } else toast("删除失败", true); }
+  catch(e) { toast("删除失败", true); }
+}
+
+function backToList() { document.getElementById("editor-view").classList.add("hidden"); document.getElementById("tab-posts").classList.remove("hidden"); }
+
+// === CATEGORIES ===
+async function loadCategories() {
+  try { const r = await fetch("/api/categories"); const d = await r.json(); allCats = d.categories || []; renderCategories(); }
+  catch(e) { toast("加载分类失败", true); }
+}
+function renderCategories() {
+  const el = document.getElementById("cat-list");
+  if (!allCats.length) { el.innerHTML = '<p style="color:#999;text-align:center;padding:20px;">还没有分类，在上面添加</p>'; return; }
+  el.innerHTML = allCats.map(c => `<div class="cat-item">
+    <div><strong>${c.name}</strong> <span style="font-size:12px;color:#999;">(${c.slug})</span></div>
+    <button class="btn btn-danger btn-sm" onclick="deleteCategory('${c.slug}')">删除</button>
+  </div>`).join("");
+}
+async function addCategory() {
+  const name = document.getElementById("new-cat-input").value.trim();
+  if (!name) return;
+  try { const r = await fetch("/api/categories", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({name}) }); const d = await r.json();
+    if (d.ok) { document.getElementById("new-cat-input").value = ""; allCats = d.categories; renderCategories(); toast("分类已添加"); }
+    else toast("添加失败", true);
+  } catch(e) { toast("添加失败", true); }
+}
+async function deleteCategory(slug) {
+  if (!confirm("确定删除此分类？")) return;
+  try { const r = await fetch(`/api/categories/${slug}`,{method:"DELETE"}); const d = await r.json();
+    if (d.ok) { allCats = d.categories; renderCategories(); toast("分类已删除"); }
+    else toast("删除失败", true);
+  } catch(e) { toast("删除失败", true); }
+}
+
+// === GALLERY ===
+async function loadGallery() {
+  try { const r = await fetch("/api/gallery"); const d = await r.json(); renderGallery(d.images||[]); }
+  catch(e) { toast("加载相册失败", true); }
+  try { const r = await fetch("/api/gallery/page"); const d = await r.json();
+    document.getElementById("gallery-toggle").checked = d.enabled;
+    document.getElementById("gallery-link").style.display = d.enabled ? "inline" : "none";
+  } catch(e) {}
+}
+function renderGallery(images) {
+  const el = document.getElementById("gallery-grid");
+  if (!images.length) { el.innerHTML = '<p style="color:#999;text-align:center;padding:20px;grid-column:1/-1;">还没有图片，点击上方区域上传</p>'; return; }
+  el.innerHTML = images.map(img => `<div class="gallery-item">
+    <img src="${img.url}" alt="${img.filename}" loading="lazy">
+    <button class="gdel" onclick="deleteGalleryImage('${img.filename}')">×</button>
+  </div>`).join("");
+}
+async function uploadGalleryImages(input) {
+  for (const file of input.files) {
+    const f = new FormData(); f.append("file", file);
+    try { await fetch("/api/gallery/upload", { method:"POST", body:f }); } catch(e) {}
+  }
+  input.value = "";
+  toast("图片已上传"); loadGallery();
+}
+async function deleteGalleryImage(filename) {
+  if (!confirm("删除此图片？")) return;
+  try { await fetch(`/api/gallery/${filename}`,{method:"DELETE"}); loadGallery(); } catch(e) { toast("删除失败", true); }
+}
+async function toggleGallery() {
+  const on = document.getElementById("gallery-toggle").checked;
+  const text = `---
+title: "相册"
+layout: "gallery"
+---
+
+我的相册`;
+  try { await fetch("/api/gallery/page", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({enabled:on,text}) });
+    document.getElementById("gallery-link").style.display = on ? "inline" : "none";
+    toast(on ? "相册页面已开启" : "相册页面已关闭");
+  } catch(e) { toast("操作失败", true); }
+}
+
+// === HOMEPAGE ===
+async function loadHomepage() {
+  try { const r = await fetch("/api/settings/homepage"); const d = await r.json();
+    document.getElementById("hp-title").value = d.hero_title || "";
+    document.getElementById("hp-subtitle").value = d.hero_subtitle || "";
+    document.getElementById("hp-image").value = d.hero_image || "";
+    document.getElementById("hp-show-posts").checked = d.show_latest_posts !== false;
+  } catch(e) {}
+}
+async function saveHomepage() {
+  const data = {
+    hero_title: document.getElementById("hp-title").value.trim(),
+    hero_subtitle: document.getElementById("hp-subtitle").value.trim(),
+    hero_image: document.getElementById("hp-image").value.trim(),
+    show_latest_posts: document.getElementById("hp-show-posts").checked
+  };
+  try { const r = await fetch("/api/settings/homepage", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(data) });
+    const d = await r.json();
+    if (d.ok) { toast("首页设置已保存！部署后可查看效果"); } else toast("保存失败", true);
+  } catch(e) { toast("保存失败", true); }
+}
+
+// === UPLOADS ===
+async function uploadImage(input) {
+  const file = input.files[0]; if (!file) return;
+  const f = new FormData(); f.append("file", file);
+  try { const r = await fetch("/api/upload/image", { method:"POST", body:f }); const d = await r.json();
+    if (d.ok) { document.getElementById("post-content").value += `\n![${file.name}](${d.url})\n`; toast("图片已插入"); }
+    else toast("上传失败", true);
+  } catch(e) { toast("上传失败", true); } input.value = "";
+}
+async function uploadDoc(input) {
+  const file = input.files[0]; if (!file) return;
+  const f = new FormData(); f.append("file", file);
+  try { const r = await fetch("/api/upload/doc", { method:"POST", body:f }); const d = await r.json();
+    if (d.ok) { toast(`文档 "${d.title}" 已导入并发布！`); loadPosts(); } else toast("导入失败", true);
+  } catch(e) { toast("导入失败", true); } input.value = "";
 }
 </script>
 </body>
