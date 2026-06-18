@@ -1,11 +1,215 @@
 <!DOCTYPE html>
-<html>
+<html lang="zh-CN">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Content Manager</title>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>博客后台</title>
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #f5f5f5; color: #333; }
+.container { max-width: 1000px; margin: 0 auto; padding: 20px; }
+.hidden { display: none !important; }
+h1 { font-size: 24px; margin-bottom: 20px; }
+.btn { display: inline-block; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; }
+.btn-primary { background: #1a73e8; color: #fff; }
+.btn-primary:hover { background: #1557b0; }
+.btn-danger { background: #dc3545; color: #fff; }
+.btn-secondary { background: #6c757d; color: #fff; }
+input, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 6px; font-size: 14px; }
+textarea { min-height: 500px; font-family: "SFMono-Regular", Consolas, monospace; line-height: 1.6; }
+.card { background: #fff; border-radius: 8px; padding: 20px; margin-bottom: 16px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+.post-item { display: flex; justify-content: space-between; align-items: center; padding: 12px 0; border-bottom: 1px solid #eee; cursor: pointer; }
+.post-item:hover { color: #1a73e8; }
+.post-item:last-child { border-bottom: none; }
+.post-title { font-size: 16px; }
+.post-date { font-size: 12px; color: #999; }
+.toolbar { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+.login-box { max-width: 400px; margin: 100px auto; }
+.login-box input { margin-bottom: 12px; }
+.login-box .error { color: #dc3545; font-size: 13px; margin-top: 8px; }
+.editor-header input { font-size: 20px; font-weight: bold; margin-bottom: 12px; border: none; border-bottom: 2px solid #1a73e8; border-radius: 0; padding: 8px 0; }
+.toast { position: fixed; top: 20px; right: 20px; background: #28a745; color: #fff; padding: 12px 20px; border-radius: 8px; z-index: 999; }
+.toast.error { background: #dc3545; }
+</style>
 </head>
 <body>
-  <script src="https://unpkg.com/decap-cms@^3.0.0/dist/decap-cms.js"></script>
+<div class="container">
+
+<div id="login-view" class="login-box card">
+  <h1>登录</h1>
+  <p style="color:#666;font-size:13px;margin-bottom:12px;">输入你的 GitHub Personal Access Token</p>
+  <input type="password" id="pat-input" placeholder="ghp_xxxxxxxxxxxxxxxxxxxx">
+  <button class="btn btn-primary" onclick="login()">登录</button>
+  <div id="login-error" class="error hidden"></div>
+</div>
+
+<div id="main-view" class="hidden">
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px;">
+    <h1>文章管理</h1>
+    <div>
+      <button class="btn btn-primary" onclick="newPost()">+ 新建文章</button>
+      <button class="btn btn-secondary" onclick="logout()">登出</button>
+    </div>
+  </div>
+
+  <div id="post-list" class="card"></div>
+
+  <div id="editor-view" class="hidden card">
+    <div class="toolbar">
+      <button class="btn btn-secondary" onclick="backToList()">← 返回</button>
+      <button class="btn btn-primary" onclick="savePost()">保存并发布</button>
+    </div>
+    <div class="editor-header">
+      <input type="text" id="post-title" placeholder="文章标题">
+    </div>
+    <textarea id="post-content" placeholder="在此写 Markdown 内容..."></textarea>
+    <input type="hidden" id="post-slug">
+  </div>
+</div>
+
+</div>
+
+<script>
+let currentToken = "";
+let currentPosts = [];
+
+function showToast(msg, isError = false) {
+  const t = document.createElement("div");
+  t.className = "toast" + (isError ? " error" : "");
+  t.textContent = msg;
+  document.body.appendChild(t);
+  setTimeout(() => t.remove(), 3000);
+}
+
+async function login() {
+  const token = document.getElementById("pat-input").value.trim();
+  if (!token) return;
+  document.getElementById("login-error").classList.add("hidden");
+  try {
+    const r = await fetch("/api/auth", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ token }),
+    });
+    const data = await r.json();
+    if (data.ok) {
+      currentToken = token;
+      document.getElementById("login-view").classList.add("hidden");
+      document.getElementById("main-view").classList.remove("hidden");
+      loadPosts();
+    } else {
+      document.getElementById("login-error").textContent = "Token 验证失败，请检查";
+      document.getElementById("login-error").classList.remove("hidden");
+    }
+  } catch(e) {
+    document.getElementById("login-error").textContent = "连接失败：" + e.message;
+    document.getElementById("login-error").classList.remove("hidden");
+  }
+}
+
+function logout() {
+  currentToken = "";
+  currentPosts = [];
+  document.getElementById("login-view").classList.remove("hidden");
+  document.getElementById("main-view").classList.add("hidden");
+  document.getElementById("editor-view").classList.add("hidden");
+  document.getElementById("post-list").innerHTML = "";
+  document.getElementById("pat-input").value = "";
+}
+
+async function loadPosts() {
+  try {
+    const r = await fetch("/api/posts");
+    const data = await r.json();
+    currentPosts = data.posts || [];
+    renderPostList();
+  } catch(e) {
+    showToast("加载失败：" + e.message, true);
+  }
+}
+
+function renderPostList() {
+  const list = document.getElementById("post-list");
+  if (currentPosts.length === 0) {
+    list.innerHTML = '<p style="color:#999;text-align:center;padding:20px;">还没有文章，点击"新建文章"开始写</p>';
+    return;
+  }
+  list.innerHTML = currentPosts.map(p => `
+    <div class="post-item" onclick="editPost('${p.slug}')">
+      <div>
+        <div class="post-title">${p.title}</div>
+        <div class="post-date">${p.date || ''}</div>
+      </div>
+      <span style="color:#999;font-size:12px;">${p.slug}.md</span>
+    </div>
+  `).join("");
+}
+
+function newPost() {
+  document.getElementById("post-slug").value = "";
+  document.getElementById("post-title").value = "";
+  document.getElementById("post-content").value = "";
+  document.getElementById("editor-view").classList.remove("hidden");
+  document.getElementById("post-list").parentElement.classList.add("hidden");
+}
+
+async function editPost(slug) {
+  try {
+    const r = await fetch(`/api/posts/${slug}`);
+    const data = await r.json();
+    const content = data.content;
+    const titleMatch = content.match(/^title:\s*["']?(.+?)["']?\s*$/m);
+    const bodyStart = content.indexOf("\n---\n", content.indexOf("---") + 4);
+    const body = bodyStart > 0 ? content.substring(bodyStart + 5) : content;
+    document.getElementById("post-slug").value = slug;
+    document.getElementById("post-title").value = titleMatch ? titleMatch[1] : slug;
+    document.getElementById("post-content").value = body.trim();
+    document.getElementById("editor-view").classList.remove("hidden");
+    document.getElementById("post-list").parentElement.classList.add("hidden");
+  } catch(e) {
+    showToast("加载失败：" + e.message, true);
+  }
+}
+
+async function savePost() {
+  const title = document.getElementById("post-title").value.trim();
+  const content = document.getElementById("post-content").value.trim();
+  let slug = document.getElementById("post-slug").value.trim();
+
+  if (!title || !content) { showToast("标题和内容不能为空", true); return; }
+
+  if (!slug) {
+    slug = title.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]+/g, "-").replace(/^-|-$/g, "") || "post";
+  }
+
+  const btn = document.querySelector("#editor-view .btn-primary");
+  btn.textContent = "保存中...";
+  btn.disabled = true;
+
+  try {
+    const r = await fetch("/api/posts/save", {
+      method: "POST", headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ slug, title, content, token: currentToken }),
+    });
+    const data = await r.json();
+    if (data.ok) {
+      showToast("文章已保存并发布！");
+      backToList();
+      loadPosts();
+    } else {
+      showToast("保存失败：" + (data.error || "未知错误"), true);
+    }
+  } catch(e) {
+    showToast("保存失败：" + e.message, true);
+  } finally {
+    btn.textContent = "保存并发布";
+    btn.disabled = false;
+  }
+}
+
+function backToList() {
+  document.getElementById("editor-view").classList.add("hidden");
+  document.getElementById("post-list").parentElement.classList.remove("hidden");
+}
+</script>
 </body>
 </html>
