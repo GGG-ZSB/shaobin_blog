@@ -17,6 +17,20 @@
 .hero-c h1 { font-size:clamp(2.5rem,6vw,4.5rem);font-weight:700;margin-bottom:16px;color:#fff;text-shadow:0 2px 20px rgba(0,0,0,.3);letter-spacing:-1px; }
 .hero-c p { font-size:clamp(1rem,2.5vw,1.4rem);color:rgba(255,255,255,.9);text-shadow:0 1px 10px rgba(0,0,0,.2);max-width:600px;margin:0 auto;line-height:1.7; }
 .hero-sc { position:absolute;bottom:40px;left:50%;transform:translateX(-50%);z-index:2;color:#fff;font-size:14px;opacity:.7;animation:bnc 2s infinite; }
+.hero-gradient {
+    position:absolute;
+    bottom:0;
+    left:0;
+    right:0;
+    width:100%;
+    height:200px;
+    background:linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,1) 100%);
+    z-index:2;
+    pointer-events:none;
+}
+[data-scheme="dark"] .hero-gradient {
+    background:linear-gradient(to bottom, rgba(20,20,30,0) 0%, rgba(20,20,30,1) 100%);
+}
 @keyframes bnc { 0%,100%{transform:translateX(-50%) translateY(0)} 50%{transform:translateX(-50%) translateY(8px)} }
 .ps { max-width:900px;margin:0 auto;padding:60px 20px; }
 .ps h2 { font-size:24px;font-weight:600;margin-bottom:32px;color:var(--text-primary); }
@@ -31,6 +45,7 @@
 <div class="hero-fs">
     <div class="hero-c"><h1>{{ $t }}</h1>{{ if $s }}<p>{{ $s }}</p>{{ end }}</div>
     <div class="hero-sc">↓ 向下滚动</div>
+    <div class="hero-gradient"></div>
 </div>
 <div class="ps">
     <h2>最新文章</h2>
