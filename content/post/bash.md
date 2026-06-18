@@ -1,5 +1,5 @@
 ---
-title: "```bash"
+title: "标准化配置"
 date: 2026-06-18
 categories: []
 ---
@@ -32,4 +32,3 @@ echo 'UseDNS no' >> /etc/ssh/sshd_config
 # 7 关机打快照
 init 0
 ```
-还要加一个脚本
