@@ -1,0 +1,22 @@
+backend:
+  name: github
+  repo: GGG-ZSB/shaobin_blog
+  branch: main
+  base_url: https://shaobin.cloud
+  auth_endpoint: /api/auth
+
+media_folder: static/img
+public_folder: /img
+
+collections:
+  - name: "post"
+    label: "文章"
+    folder: "content/post"
+    create: true
+    slug: "{{slug}}"
+    fields:
+      - { label: "标题", name: "title", widget: "string" }
+      - { label: "发布日期", name: "date", widget: "datetime" }
+      - { label: "标签", name: "tags", widget: "list", required: false }
+      - { label: "分类", name: "categories", widget: "list", required: false }
+      - { label: "正文", name: "body", widget: "markdown" }
