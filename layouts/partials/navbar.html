@@ -4,26 +4,8 @@
         <div class="nav-links" id="navLinks">
             <a href="/">首页</a>
             <a href="/post/">归档</a>
-            <div class="nav-dropdown">
-                <a href="/categories/" class="dropdown-trigger">分类 ▾</a>
-                <div class="dropdown-menu">
-                    {{ range .Site.Taxonomies.categories.ByCount }}
-                    <a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} ({{ .Count }})</a>
-                    {{ else }}
-                    <a href="/categories/" style="color:#999;">暂无分类</a>
-                    {{ end }}
-                </div>
-            </div>
-            <div class="nav-dropdown">
-                <a href="/tags/" class="dropdown-trigger">标签 ▾</a>
-                <div class="dropdown-menu">
-                    {{ range .Site.Taxonomies.tags.ByCount }}
-                    <a href="{{ .Page.RelPermalink }}">{{ .Page.Title }} ({{ .Count }})</a>
-                    {{ else }}
-                    <a href="/tags/" style="color:#999;">暂无标签</a>
-                    {{ end }}
-                </div>
-            </div>
+            <a href="/categories/">分类</a>
+            <a href="/tags/">标签</a>
             <a href="/gallery/">相册</a>
             <a href="/search/">搜索</a>
             <button class="nav-theme-btn" id="themeToggle">🌓</button>
@@ -34,17 +16,15 @@
 <script>
 (function() {
     const html = document.documentElement;
-    const themeBtn = document.getElementById('themeToggle');
-    if (themeBtn) themeBtn.addEventListener('click', function() {
-        const c = html.getAttribute('data-scheme') || 'light';
-        const n = c === 'dark' ? 'light' : 'dark';
-        html.setAttribute('data-scheme', n);
-        localStorage.setItem('StackColorScheme', n);
+    const t = document.getElementById('themeToggle');
+    if(t) t.addEventListener('click',function(){
+        const c=html.getAttribute('data-scheme')||'light';
+        html.setAttribute('data-scheme',c==='dark'?'light':'dark');
+        localStorage.setItem('StackColorScheme',html.getAttribute('data-scheme'));
     });
-    const nt = document.getElementById('navToggle');
-    const nl = document.getElementById('navLinks');
-    if (nt && nl) nt.addEventListener('click', function() { nl.classList.toggle('open'); });
-    const nb = document.getElementById('navbar');
-    if (nb) window.addEventListener('scroll', function() { nb.classList.toggle('scrolled', window.scrollY > 50); });
+    const nt=document.getElementById('navToggle'),nl=document.getElementById('navLinks');
+    if(nt&&nl) nt.addEventListener('click',function(){nl.classList.toggle('open');});
+    const nb=document.getElementById('navbar');
+    if(nb) window.addEventListener('scroll',function(){nb.classList.toggle('scrolled',window.scrollY>50);});
 })();
 </script>
