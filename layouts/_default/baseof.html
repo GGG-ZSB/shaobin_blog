@@ -7,10 +7,20 @@
     <body class="{{ block `body-class` . }}{{ end }}">
         {{- partial "head/colorScheme" . -}}
         {{ partial "navbar.html" . }}
+        {{ if .IsHome }}
         <main class="main custom-main">
             {{- block "main" . }}{{- end }}
         </main>
+        {{ else }}
+        <div class="container main-container">
+            <main class="main full-width">
+                {{- block "main" . }}{{- end }}
+            </main>
+        </div>
+        {{ end }}
+        {{ if not .IsHome }}
         <div style="display:none">{{- block "right-sidebar" . -}}{{ end }}</div>
+        {{ end }}
         {{ partial "footer/include.html" . }}
     </body>
 </html>
