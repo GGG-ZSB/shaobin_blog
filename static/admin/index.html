@@ -126,7 +126,7 @@ textarea { min-height: 400px; font-family: "SFMono-Regular", Consolas, monospace
       </div>
       <div id="album-list" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;"></div>
       <div id="current-album-label" style="font-size:13px;font-weight:500;color:var(--text-primary);margin-bottom:8px;">当前相册: <span id="current-album-name">默认相册</span></div>
-      <div class="upload-area" onclick="document.getElementById("gallery-upload").click()">
+      <div class="upload-area" onclick="document.getElementById('gallery-upload').click()">
         <p style="font-size:15px;color:#999;">🖼️ 点击上传图片到当前相册</p>
         <p id="gallery-upload-hint" style="font-size:12px;color:#bbb;margin-top:4px;">支持 PNG / JPG / WebP / GIF</p>
         <input type="file" id="gallery-upload" accept="image/*" multiple onchange="uploadGalleryImages(this)">
@@ -345,7 +345,7 @@ function switchAlbum(slug) {
 function renderGallery(images) {
   const el = document.getElementById("gallery-grid");
   if (!images || !images.length) { el.innerHTML = '<p style="color:#999;text-align:center;padding:20px;grid-column:1/-1;">这个相册还没有图片</p>'; return; }
-  el.innerHTML = images.map(img => `<div class="gallery-item"><img src="${img.url}" alt="${img.filename}" loading="lazy"><button class="gdel" onclick=\'deleteGalleryImage("${currentAlbum.slug}","${img.filename}")\' >×</button></div>`).join("");
+  el.innerHTML = images.map(img => `<div class="gallery-item"><img src="${img.url}" alt="${img.filename}" loading="lazy"><button class="gdel" onclick='deleteGalleryImage("${currentAlbum.slug}","${img.filename}")\' >×</button></div>`).join("");
 }
 
 async function uploadGalleryImages(input) {
