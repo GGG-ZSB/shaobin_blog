@@ -374,7 +374,7 @@ async function createAlbum() {
 }
 
 // === HOMEPAGE ===
-async function loadHomepage() { try { const r = await fetch("/api/settings/homepage"); const d = await r.json(); document.getElementById("hp-title").value = d.hero_title || ""; document.getElementById("hp-subtitle").value = d.hero_subtitle || ""; document.getElementById("hp-image").value = d.hero_image || ""; document.getElementById("hp-show-posts").checked = d.show_latest_posts !== false; } catch(e) {} }
+async function loadHomepage() { try { const r = await fetch("/api/settings/homepage"); const d = await r.json(); document.getElementById("hp-title").value = d.hero_title || ""; document.getElementById("hp-subtitle").value = d.hero_subtitle || ""; document.getElementById("hp-image").value = d.hero_image || ""; document.getElementById("hp-site-bg").value = d.site_bg || ""; document.getElementById("hp-show-posts").checked = d.show_latest_posts !== false; } catch(e) {} }
 
 async function uploadHomepageBg(input) {
   const file = input.files[0]; if (!file) return;
