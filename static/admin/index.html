@@ -25,14 +25,10 @@ input:focus, textarea:focus, select:focus { outline: none; border-color: #1a73e8
 textarea { min-height: 400px; font-family: "SFMono-Regular", Consolas, monospace; line-height: 1.7; resize: vertical; }
 .card { background: #fff; border-radius: 10px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,.08); }
 .card + .card { margin-top: 16px; }
-
-/* Tabs */
 .tabs { display: flex; gap: 0; background: #fff; border-radius: 10px 10px 0 0; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,.08); margin-bottom: 16px; }
 .tab { padding: 14px 24px; cursor: pointer; font-size: 14px; font-weight: 500; color: #666; border-bottom: 3px solid transparent; transition: all .2s; user-select: none; }
 .tab:hover { color: #1a73e8; background: #f5f8ff; }
 .tab.active { color: #1a73e8; border-bottom-color: #1a73e8; }
-
-/* Post list */
 .post-item { display: flex; justify-content: space-between; align-items: center; padding: 14px 0; border-bottom: 1px solid #f0f0f0; }
 .post-item:last-child { border-bottom: none; }
 .post-item .info { flex: 1; cursor: pointer; }
@@ -40,42 +36,25 @@ textarea { min-height: 400px; font-family: "SFMono-Regular", Consolas, monospace
 .ptitle { font-size: 15px; transition: color .2s; }
 .pmeta { font-size: 12px; color: #999; margin-top: 3px; display: flex; gap: 8px; flex-wrap: wrap; }
 .tag { display: inline-block; padding: 1px 8px; border-radius: 10px; font-size: 11px; background: #e8f0fe; color: #1967d2; }
-
-/* Category */
 .cat-item { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; border-bottom: 1px solid #f0f0f0; }
 .cat-item:last-child { border-bottom: none; }
-
-/* Gallery */
 .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 12px; }
 .gallery-item { position: relative; border-radius: 8px; overflow: hidden; aspect-ratio: 1; background: #f5f5f5; }
 .gallery-item img { width: 100%; height: 100%; object-fit: cover; }
 .gallery-item .gdel { position: absolute; top: 6px; right: 6px; background: rgba(0,0,0,.6); color: #fff; border: none; border-radius: 50%; width: 28px; height: 28px; cursor: pointer; font-size: 16px; line-height: 28px; text-align: center; opacity: 0; transition: opacity .2s; }
 .gallery-item:hover .gdel { opacity: 1; }
-
-/* Login */
 .login-box { max-width: 380px; margin: 80px auto; }
 .login-box input { margin-bottom: 14px; }
 .login-box .error { color: #dc3545; font-size: 13px; margin-top: 8px; }
-
-/* Toolbar */
 .toolbar { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
 .etitle input { font-size: 20px; font-weight: 600; margin-bottom: 14px; border: none; border-bottom: 2px solid #1a73e8; border-radius: 0; padding: 8px 0; }
-
-/* Toast */
 .toast { position: fixed; top: 20px; right: 20px; background: #28a745; color: #fff; padding: 12px 24px; border-radius: 8px; z-index: 999; font-size: 14px; box-shadow: 0 4px 12px rgba(0,0,0,.15); }
 .toast.error { background: #dc3545; }
-
-/* Upload area */
-.upload-area { border: 2px dashed #d9d9d9; border-radius: 8px; padding: 30px; text-align: center; cursor: pointer; transition: all .2s; margin-bottom: 16px; }
+.upload-area { border: 2px dashed #d9d9d9; border-radius: 8px; padding: 20px; text-align: center; cursor: pointer; transition: all .2s; margin-bottom: 14px; }
 .upload-area:hover { border-color: #1a73e8; background: #f5f8ff; }
 .upload-area input[type="file"] { display: none; }
-
-/* Homepage editor */
 .hp-field { margin-bottom: 14px; }
 .hp-field label { display: block; font-size: 13px; font-weight: 500; color: #555; margin-bottom: 4px; }
-.hp-preview { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; background: #f0f0f0; }
-
-/* Category multi-select */
 .cat-select { display: flex; flex-wrap: wrap; gap: 6px; margin: 8px 0 14px; }
 .cat-chip { display: inline-flex; align-items: center; gap: 4px; padding: 4px 12px; border-radius: 14px; font-size: 13px; cursor: pointer; border: 1px solid #d9d9d9; transition: all .2s; user-select: none; }
 .cat-chip:hover { border-color: #1a73e8; }
@@ -85,7 +64,6 @@ textarea { min-height: 400px; font-family: "SFMono-Regular", Consolas, monospace
 <body>
 <div class="container">
 
-<!-- Login -->
 <div id="login-view" class="card login-box">
   <h1>登录后台</h1>
   <p style="color:#666;font-size:13px;margin-bottom:14px;">输入 GitHub Personal Access Token</p>
@@ -94,9 +72,7 @@ textarea { min-height: 400px; font-family: "SFMono-Regular", Consolas, monospace
   <div id="login-error" class="error hidden"></div>
 </div>
 
-<!-- Main -->
 <div id="main-view" class="hidden">
-  <!-- Tabs -->
   <div class="tabs">
     <div class="tab active" data-tab="posts" onclick="switchTab('posts')">📝 文章</div>
     <div class="tab" data-tab="categories" onclick="switchTab('categories')">📂 分类</div>
@@ -105,7 +81,7 @@ textarea { min-height: 400px; font-family: "SFMono-Regular", Consolas, monospace
     <div class="tab" onclick="logout()" style="margin-left:auto;color:#dc3545;">登出</div>
   </div>
 
-  <!-- === POSTS TAB === -->
+  <!-- POSTS -->
   <div id="tab-posts" class="tab-content">
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
@@ -119,7 +95,7 @@ textarea { min-height: 400px; font-family: "SFMono-Regular", Consolas, monospace
     </div>
   </div>
 
-  <!-- === CATEGORIES TAB === -->
+  <!-- CATEGORIES -->
   <div id="tab-categories" class="tab-content hidden">
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
@@ -134,28 +110,33 @@ textarea { min-height: 400px; font-family: "SFMono-Regular", Consolas, monospace
     </div>
   </div>
 
-  <!-- === GALLERY TAB === -->
+  <!-- GALLERY -->
   <div id="tab-gallery" class="tab-content hidden">
     <div class="card">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;flex-wrap:wrap;gap:8px;">
         <h1>相册管理</h1>
         <div style="display:flex;gap:8px;align-items:center;">
-          <label style="cursor:pointer;display:flex;align-items:center;gap:4px;font-size:13px;color:#555;">
-            <input type="checkbox" id="gallery-toggle" onchange="toggleGallery()"> 启用相册页面
-          </label>
-          <a id="gallery-link" href="/gallery" target="_blank" style="font-size:13px;display:none;">查看相册 →</a>
+          <a id="gallery-link" href="/gallery" target="_blank" style="font-size:13px;">查看相册 →</a>
         </div>
       </div>
-      <div class="upload-area" onclick="document.getElementById('gallery-upload').click()">
-        <p style="font-size:15px;color:#999;">🖼️ 点击上传图片到相册</p>
-        <p style="font-size:12px;color:#bbb;margin-top:4px;">支持 PNG / JPG / WebP / GIF</p>
+      <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center;">
+        <input id="new-album-input" placeholder="新建相册名称" style="width:180px;flex:1;min-width:120px;padding:8px 12px;">
+        <input id="new-album-desc" placeholder="描述（可选）" style="width:180px;flex:1;min-width:120px;padding:8px 12px;">
+        <button class="btn btn-primary btn-sm" onclick="createAlbum()">+ 创建相册</button>
+      </div>
+      <div id="album-list" style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px;"></div>
+      <div id="current-album-label" style="font-size:13px;font-weight:500;color:var(--text-primary);margin-bottom:8px;">当前相册: <span id="current-album-name">默认相册</span></div>
+      <div class="upload-area" onclick="document.getElementById("gallery-upload").click()">
+        <p style="font-size:15px;color:#999;">🖼️ 点击上传图片到当前相册</p>
+        <p id="gallery-upload-hint" style="font-size:12px;color:#bbb;margin-top:4px;">支持 PNG / JPG / WebP / GIF</p>
         <input type="file" id="gallery-upload" accept="image/*" multiple onchange="uploadGalleryImages(this)">
       </div>
       <div id="gallery-grid" class="gallery-grid"></div>
     </div>
   </div>
+  </div>
 
-  <!-- === HOMEPAGE TAB === -->
+  <!-- HOMEPAGE -->
   <div id="tab-homepage" class="tab-content hidden">
     <div class="card">
       <h1>首页设置</h1>
@@ -168,25 +149,54 @@ textarea { min-height: 400px; font-family: "SFMono-Regular", Consolas, monospace
         <label>封面副标题</label>
         <input id="hp-subtitle" placeholder="例如: 记录技术成长与生活思考">
       </div>
+      <div class="upload-area" onclick="document.getElementById('hp-img-upload').click()">
+        <p style="font-size:15px;color:#999;">🖼️ 选择电脑上的图片作为封面背景</p>
+        <p id="hp-img-name" style="font-size:12px;color:#bbb;margin-top:4px;"></p>
+        <input type="file" id="hp-img-upload" accept="image/*" onchange="uploadHomepageBg(this)" style="display:none;">
+      </div>
       <div class="hp-field">
-        <label>背景图片 URL</label>
-        <input id="hp-image" placeholder="留空使用默认纯色背景，或输入 /img/xxx.jpg">
+        <label>或输入图片 URL（上传后自动填入）</label>
+        <input id="hp-image" placeholder="/img/xxx.jpg 或 https://...">
+      <div class="upload-area" onclick="document.getElementById('site-bg-upload').click()" style="margin-bottom:14px;padding:20px;border:2px dashed #d9d9d9;border-radius:8px;text-align:center;cursor:pointer;">
+        <p style="font-size:15px;color:#999;">🌐 点击上传全页背景图（铺满整站底层）</p>
+        <p id="site-bg-name" style="font-size:12px;color:#bbb;margin-top:4px;"></p>
+        <input type="file" id="site-bg-upload" accept="image/*" onchange="uploadSiteBg(this)" style="display:none;">
       </div>
-      <label style="display:flex;align-items:center;gap:8px;font-size:14px;margin-bottom:16px;">
-        <input type="checkbox" id="hp-show-posts" checked> 在封面下方显示最新文章列表
-      </label>
-      <div style="display:flex;gap:8px;">
-        <button class="btn btn-primary" onclick="saveHomepage()">保存首页设置</button>
+      <div class="hp-field">
+        <label>全页背景 URL</label>
+        <input id="hp-site-bg" placeholder="/img/xxx.jpg">
       </div>
+      </div>
+      <div class="hp-field">
+        <label style="display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;">
+          <input type="checkbox" id="hp-show-posts" checked> 在封面下方显示最新文章
+        </label>
+      </div>
+      <button class="btn btn-primary" onclick="saveHomepage()">💾 保存首页设置</button>
     </div>
   </div>
 
-  <!-- === EDITOR OVERLAY === -->
+  <!-- EDITOR -->
+  <div id="cat-modal" class="hidden" style="position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.5);display:flex;align-items:center;justify-content:center;" onclick="if(event.target===this)closeCatModal()">
+    <div style="background:var(--bg-overlay,#fff);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-radius:14px;padding:24px;max-width:420px;width:90%;box-shadow:0 8px 32px rgba(0,0,0,.15);">
+      <h3 style="margin-bottom:4px;font-size:18px;">📄 选择分类</h3>
+      <p id="cat-modal-filename" style="font-size:13px;color:#888;margin-bottom:14px;"></p>
+      <div id="cat-modal-list" style="margin-bottom:12px;max-height:200px;overflow-y:auto;"></div>
+      <div style="display:flex;gap:8px;margin-bottom:12px;">
+        <input id="cat-modal-new" placeholder="新建分类名称" style="flex:1;padding:8px 12px;font-size:13px;">
+        <button class="btn btn-success btn-sm" onclick="addCatFromModal()" style="white-space:nowrap;">+ 添加</button>
+      </div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;">
+        <button class="btn btn-secondary" onclick="closeCatModal()">取消</button>
+        <button class="btn btn-primary" onclick="confirmUploadDoc()">确认上传</button>
+      </div>
+    </div>
+  </div>
   <div id="editor-view" class="hidden card" style="margin-top:0;">
     <div class="toolbar">
       <button class="btn btn-secondary" onclick="backToList()">← 返回</button>
       <button class="btn btn-primary" onclick="savePost()">💾 保存并发布</button>
-      <label class="btn btn-secondary btn-sm" style="cursor:pointer;">🖼️ 上传图片<input type="file" accept="image/*" onchange="uploadImage(this)" style="display:none;"></label>
+      <label class="btn btn-secondary btn-sm" style="cursor:pointer;">🖼️ 上传图片到正文<input type="file" accept="image/*" onchange="uploadImage(this)" style="display:none;"></label>
     </div>
     <div class="etitle"><input type="text" id="post-title" placeholder="文章标题"></div>
     <div style="margin-bottom:12px;">
@@ -226,7 +236,6 @@ function switchTab(name) {
   if (name === "gallery") loadGallery();
   if (name === "homepage") loadHomepage();
 }
-
 function loadAll() { loadPosts(); loadCategories(); loadGallery(); loadHomepage(); }
 
 // === POSTS ===
@@ -236,25 +245,20 @@ async function loadPosts() {
 }
 function renderPosts() {
   const el = document.getElementById("post-list");
-  if (!allPosts.length) { el.innerHTML = '<p style="color:#999;text-align:center;padding:20px;">还没有文章，点击"新建文章"开始写</p>'; return; }
+  if (!allPosts.length) { el.innerHTML = '<p style="color:#999;text-align:center;padding:20px;">还没有文章</p>'; return; }
   el.innerHTML = allPosts.map(p => `<div class="post-item">
     <div class="info" onclick="editPost('${p.slug}')">
       <div class="ptitle">${p.title}</div>
-      <div class="pmeta">
-        <span>${p.date||''}</span>
-        ${(p.categories||[]).map(c => `<span class="tag">${c}</span>`).join('')}
-      </div>
+      <div class="pmeta"><span>${p.date||''}</span>${(p.categories||[]).map(c => `<span class="tag">${c}</span>`).join('')}</div>
     </div>
     <button class="btn btn-danger btn-sm" onclick="deletePost('${p.slug}')">🗑️</button>
   </div>`).join("");
 }
-
 function newPost() {
   document.getElementById("post-slug").value = ""; document.getElementById("post-title").value = ""; document.getElementById("post-content").value = ""; selectedCats = [];
   document.getElementById("tab-posts").classList.add("hidden"); document.getElementById("editor-view").classList.remove("hidden");
   renderEditorCats();
 }
-
 async function editPost(slug) {
   try { const r = await fetch(`/api/posts/${slug}`); const d = await r.json();
     const t = d.content.match(/^title:\s*["']?(.+?)["']?\s*$/m);
@@ -269,7 +273,6 @@ async function editPost(slug) {
     renderEditorCats();
   } catch(e) { toast("加载失败：" + e.message, true); }
 }
-
 function renderEditorCats() {
   const el = document.getElementById("editor-cats");
   el.innerHTML = allCats.map(c => `<span class="cat-chip${selectedCats.includes(c.name)?" selected":""}" onclick="toggleEditorCat('${c.name}')">${c.name}</span>`).join("");
@@ -280,7 +283,6 @@ function toggleEditorCat(name) {
   if (i >= 0) selectedCats.splice(i,1); else selectedCats.push(name);
   renderEditorCats();
 }
-
 async function savePost() {
   const title = document.getElementById("post-title").value.trim();
   const content = document.getElementById("post-content").value.trim();
@@ -288,133 +290,176 @@ async function savePost() {
   if (!title || !content) { toast("标题和内容不能为空", true); return; }
   if (!slug) slug = title.toLowerCase().replace(/[^a-z0-9\u4e00-\u9fa5]+/g,"-").replace(/^-|-$/g,"")||"post";
   const btn = document.querySelector("#editor-view .btn-primary"); btn.textContent = "保存中..."; btn.disabled = true;
-  try {
-    const r = await fetch("/api/posts/save", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({slug,title,content,categories:selectedCats}) });
-    const d = await r.json();
-    if (d.ok) { toast("已保存并发布！"); backToList(); loadPosts(); }
-    else toast("保存失败：" + (d.error||"未知错误"), true);
-  } catch(e) { toast("保存失败："+e.message, true); }
-  finally { btn.textContent = "保存并发布"; btn.disabled = false; }
+  try { const r = await fetch("/api/posts/save", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({slug,title,content,categories:selectedCats}) }); const d = await r.json();
+    if (d.ok) { toast("已保存并发布！"); backToList(); loadPosts(); } else toast("保存失败", true);
+  } catch(e) { toast("保存失败", true); } finally { btn.textContent = "保存并发布"; btn.disabled = false; }
 }
-
-async function deletePost(slug) {
-  if (!confirm("确定删除这篇？")) return;
-  try { const r = await fetch(`/api/posts/${slug}`,{method:"DELETE"}); const d = await r.json();
-    if (d.ok) { toast("已删除"); loadPosts(); } else toast("删除失败", true); }
-  catch(e) { toast("删除失败", true); }
-}
-
+async function deletePost(slug) { if (!confirm("确定删除？")) return;
+  try { const r = await fetch(`/api/posts/${slug}`,{method:"DELETE"}); const d = await r.json(); if (d.ok) { toast("已删除"); loadPosts(); } else toast("删除失败", true); } catch(e) { toast("删除失败", true); } }
 function backToList() { document.getElementById("editor-view").classList.add("hidden"); document.getElementById("tab-posts").classList.remove("hidden"); }
 
 // === CATEGORIES ===
-async function loadCategories() {
-  try { const r = await fetch("/api/categories"); const d = await r.json(); allCats = d.categories || []; renderCategories(); }
-  catch(e) { toast("加载分类失败", true); }
-}
+async function loadCategories() { try { const r = await fetch("/api/categories"); const d = await r.json(); allCats = d.categories || []; renderCategories(); } catch(e) { toast("加载分类失败", true); } }
 function renderCategories() {
   const el = document.getElementById("cat-list");
-  if (!allCats.length) { el.innerHTML = '<p style="color:#999;text-align:center;padding:20px;">还没有分类，在上面添加</p>'; return; }
-  el.innerHTML = allCats.map(c => `<div class="cat-item">
-    <div><strong>${c.name}</strong> <span style="font-size:12px;color:#999;">(${c.slug})</span></div>
-    <button class="btn btn-danger btn-sm" onclick="deleteCategory('${c.slug}')">删除</button>
-  </div>`).join("");
+  if (!allCats.length) { el.innerHTML = '<p style="color:#999;text-align:center;padding:20px;">还没有分类</p>'; return; }
+  el.innerHTML = allCats.map(c => `<div class="cat-item"><div><strong>${c.name}</strong> <span style="font-size:12px;color:#999;">(${c.slug})</span></div><button class="btn btn-danger btn-sm" onclick="deleteCategory('${c.slug}')">删除</button></div>`).join("");
 }
-async function addCategory() {
-  const name = document.getElementById("new-cat-input").value.trim();
-  if (!name) return;
-  try { const r = await fetch("/api/categories", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({name}) }); const d = await r.json();
-    if (d.ok) { document.getElementById("new-cat-input").value = ""; allCats = d.categories; renderCategories(); toast("分类已添加"); }
-    else toast("添加失败", true);
-  } catch(e) { toast("添加失败", true); }
-}
-async function deleteCategory(slug) {
-  if (!confirm("确定删除此分类？")) return;
-  try { const r = await fetch(`/api/categories/${slug}`,{method:"DELETE"}); const d = await r.json();
-    if (d.ok) { allCats = d.categories; renderCategories(); toast("分类已删除"); }
-    else toast("删除失败", true);
-  } catch(e) { toast("删除失败", true); }
-}
+async function addCategory() { const name = document.getElementById("new-cat-input").value.trim(); if (!name) return; try { const r = await fetch("/api/categories", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({name}) }); const d = await r.json(); if (d.ok) { document.getElementById("new-cat-input").value = ""; allCats = d.categories; renderCategories(); toast("分类已添加"); } else toast("添加失败", true); } catch(e) { toast("添加失败", true); } }
+async function deleteCategory(slug) { if (!confirm("确定删除？")) return; try { const r = await fetch(`/api/categories/${slug}`,{method:"DELETE"}); const d = await r.json(); if (d.ok) { allCats = d.categories; renderCategories(); toast("已删除"); } else toast("删除失败", true); } catch(e) { toast("删除失败", true); } }
 
 // === GALLERY ===
+var currentAlbum = { name: "默认相册", slug: "default" };
+var albumsData = [];
+
 async function loadGallery() {
-  try { const r = await fetch("/api/gallery"); const d = await r.json(); renderGallery(d.images||[]); }
-  catch(e) { toast("加载相册失败", true); }
-  try { const r = await fetch("/api/gallery/page"); const d = await r.json();
-    document.getElementById("gallery-toggle").checked = d.enabled;
-    document.getElementById("gallery-link").style.display = d.enabled ? "inline" : "none";
-  } catch(e) {}
+  try {
+    const r = await fetch("/api/gallery");
+    const d = await r.json();
+    const albums = d.albums || [];
+    albumsData = albums;
+    renderAlbumList();
+    const cur = albums.find(a => a.slug === currentAlbum.slug) || albums[0] || { name:"默认相册", slug:"default", images:[] };
+    currentAlbum = cur;
+    document.getElementById("current-album-name").textContent = cur.name;
+    renderGallery(cur.images || []);
+  } catch(e) { toast("加载相册失败", true); }
 }
+
+function renderAlbumList() {
+  const el = document.getElementById("album-list");
+  if (!albumsData.length) { el.innerHTML = '<span style="font-size:13px;color:#999;">还没有相册</span>'; return; }
+  el.innerHTML = albumsData.map(a => `<span style="display:inline-flex;align-items:center;gap:4px;padding:6px 14px;border-radius:20px;font-size:13px;cursor:pointer;${a.slug===currentAlbum.slug?"background:#e07a5f;color:#fff;":"background:rgba(0,0,0,.04);color:#333;"}" onclick="switchAlbum('${a.slug}')">${a.name}<span style="font-size:11px;opacity:.7"> (${(a.images||[]).length})</span></span>`).join("");
+}
+
+function switchAlbum(slug) {
+  const a = albumsData.find(x => x.slug === slug);
+  if (!a) return;
+  currentAlbum = a;
+  document.getElementById("current-album-name").textContent = a.name;
+  renderAlbumList();
+  renderGallery(a.images || []);
+  document.getElementById("gallery-upload-hint").textContent = "上传到: " + a.name;
+}
+
 function renderGallery(images) {
   const el = document.getElementById("gallery-grid");
-  if (!images.length) { el.innerHTML = '<p style="color:#999;text-align:center;padding:20px;grid-column:1/-1;">还没有图片，点击上方区域上传</p>'; return; }
-  el.innerHTML = images.map(img => `<div class="gallery-item">
-    <img src="${img.url}" alt="${img.filename}" loading="lazy">
-    <button class="gdel" onclick="deleteGalleryImage('${img.filename}')">×</button>
-  </div>`).join("");
+  if (!images || !images.length) { el.innerHTML = '<p style="color:#999;text-align:center;padding:20px;grid-column:1/-1;">这个相册还没有图片</p>'; return; }
+  el.innerHTML = images.map(img => `<div class="gallery-item"><img src="${img.url}" alt="${img.filename}" loading="lazy"><button class="gdel" onclick=\'deleteGalleryImage("${currentAlbum.slug}","${img.filename}")\' >×</button></div>`).join("");
 }
+
 async function uploadGalleryImages(input) {
   for (const file of input.files) {
-    const f = new FormData(); f.append("file", file);
+    const f = new FormData(); f.append("file", file); f.append("album", currentAlbum.slug);
     try { await fetch("/api/gallery/upload", { method:"POST", body:f }); } catch(e) {}
   }
-  input.value = "";
-  toast("图片已上传"); loadGallery();
+  input.value = ""; toast("图片已上传到: " + currentAlbum.name); loadGallery();
 }
-async function deleteGalleryImage(filename) {
-  if (!confirm("删除此图片？")) return;
-  try { await fetch(`/api/gallery/${filename}`,{method:"DELETE"}); loadGallery(); } catch(e) { toast("删除失败", true); }
-}
-async function toggleGallery() {
-  const on = document.getElementById("gallery-toggle").checked;
-  const text = `---
-title: "相册"
-layout: "gallery"
----
 
-我的相册`;
-  try { await fetch("/api/gallery/page", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({enabled:on,text}) });
-    document.getElementById("gallery-link").style.display = on ? "inline" : "none";
-    toast(on ? "相册页面已开启" : "相册页面已关闭");
-  } catch(e) { toast("操作失败", true); }
+async function deleteGalleryImage(slug, filename) {
+  if (!confirm("删除此图片？")) return;
+  try { await fetch("/api/gallery/"+slug+"/"+filename, {method:"DELETE"}); loadGallery(); } catch(e) { toast("删除失败", true); }
+}
+
+async function createAlbum() {
+  const name = document.getElementById("new-album-input").value.trim();
+  if (!name) return;
+  const desc = document.getElementById("new-album-desc").value.trim();
+  try {
+    const r = await fetch("/api/gallery/albums", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({name,description:desc}) });
+    const d = await r.json();
+    if (d.ok) { document.getElementById("new-album-input").value = ""; document.getElementById("new-album-desc").value = ""; toast("相册已创建"); loadGallery(); }
+    else toast("创建失败", true);
+  } catch(e) { toast("创建失败", true); }
 }
 
 // === HOMEPAGE ===
-async function loadHomepage() {
-  try { const r = await fetch("/api/settings/homepage"); const d = await r.json();
-    document.getElementById("hp-title").value = d.hero_title || "";
-    document.getElementById("hp-subtitle").value = d.hero_subtitle || "";
-    document.getElementById("hp-image").value = d.hero_image || "";
-    document.getElementById("hp-show-posts").checked = d.show_latest_posts !== false;
-  } catch(e) {}
-}
-async function saveHomepage() {
-  const data = {
-    hero_title: document.getElementById("hp-title").value.trim(),
-    hero_subtitle: document.getElementById("hp-subtitle").value.trim(),
-    hero_image: document.getElementById("hp-image").value.trim(),
-    show_latest_posts: document.getElementById("hp-show-posts").checked
-  };
-  try { const r = await fetch("/api/settings/homepage", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(data) });
-    const d = await r.json();
-    if (d.ok) { toast("首页设置已保存！部署后可查看效果"); } else toast("保存失败", true);
-  } catch(e) { toast("保存失败", true); }
-}
+async function loadHomepage() { try { const r = await fetch("/api/settings/homepage"); const d = await r.json(); document.getElementById("hp-title").value = d.hero_title || ""; document.getElementById("hp-subtitle").value = d.hero_subtitle || ""; document.getElementById("hp-image").value = d.hero_image || ""; document.getElementById("hp-show-posts").checked = d.show_latest_posts !== false; } catch(e) {} }
 
-// === UPLOADS ===
-async function uploadImage(input) {
+async function uploadHomepageBg(input) {
   const file = input.files[0]; if (!file) return;
   const f = new FormData(); f.append("file", file);
   try { const r = await fetch("/api/upload/image", { method:"POST", body:f }); const d = await r.json();
-    if (d.ok) { document.getElementById("post-content").value += `\n![${file.name}](${d.url})\n`; toast("图片已插入"); }
+    if (d.ok) { document.getElementById("hp-image").value = d.url; document.getElementById("hp-img-name").textContent = "已选择: " + file.name; toast("背景图片已上传！记得点保存"); }
     else toast("上传失败", true);
   } catch(e) { toast("上传失败", true); } input.value = "";
 }
-async function uploadDoc(input) {
+async function uploadSiteBg(input) {
   const file = input.files[0]; if (!file) return;
   const f = new FormData(); f.append("file", file);
-  try { const r = await fetch("/api/upload/doc", { method:"POST", body:f }); const d = await r.json();
-    if (d.ok) { toast(`文档 "${d.title}" 已导入并发布！`); loadPosts(); } else toast("导入失败", true);
-  } catch(e) { toast("导入失败", true); } input.value = "";
+  try { const r = await fetch("/api/upload/image", { method:"POST", body:f }); const d = await r.json();
+    if (d.ok) { document.getElementById("hp-site-bg").value = d.url; document.getElementById("site-bg-name").textContent = "已选择: " + file.name; toast("全页背景已上传！记得点保存"); }
+    else toast("上传失败", true);
+  } catch(e) { toast("上传失败", true); } input.value = "";
+}
+
+async function saveHomepage() {
+  const data = { hero_title: document.getElementById("hp-title").value.trim(), hero_subtitle: document.getElementById("hp-subtitle").value.trim(), hero_image: document.getElementById("hp-image").value.trim(), site_bg: document.getElementById("hp-site-bg").value.trim(), show_latest_posts: document.getElementById("hp-show-posts").checked };
+  try { const r = await fetch("/api/settings/homepage", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify(data) }); const d = await r.json(); if (d.ok) toast("首页设置已保存！等部署完成可查看效果"); else toast("保存失败", true); } catch(e) { toast("保存失败", true); }
+}
+
+// === UPLOADS ===
+async function uploadImage(input) { const file = input.files[0]; if (!file) return; const f = new FormData(); f.append("file", file); try { const r = await fetch("/api/upload/image", { method:"POST", body:f }); const d = await r.json(); if (d.ok) { document.getElementById("post-content").value += "\n!["+file.name+"]("+d.url+")\n"; toast("图片已插入"); } else toast("上传失败", true); } catch(e) { toast("上传失败", true); } input.value = ""; }
+var pendingUploadFile = null;
+var pendingSelectedCats = [];
+
+async function uploadDoc(input) {
+  const file = input.files[0]; if (!file) return;
+  pendingUploadFile = file;
+  pendingSelectedCats = [];
+  try {
+    const r = await fetch("/api/categories");
+    const d = await r.json();
+    const cats = d.categories || [];
+    document.getElementById("cat-modal-filename").textContent = "文件: " + file.name;
+    const list = document.getElementById("cat-modal-list");
+    list.innerHTML = cats.map(c => "<label style=\"display:flex;align-items:center;gap:8px;padding:6px 0;cursor:pointer;\"><input type=\"checkbox\" value=\"\""+c.name+"\"\" onchange=\"toggleModalCat(this)\">"+c.name+"</label>").join("");
+    document.getElementById("cat-modal").classList.remove("hidden");
+  } catch(e) { toast("加载分类失败", true); }
+  input.value = "";
+}
+
+function toggleModalCat(el) {
+  if (el.checked) { if (!pendingSelectedCats.includes(el.value)) pendingSelectedCats.push(el.value); }
+  else { pendingSelectedCats = pendingSelectedCats.filter(function(c) { return c !== el.value; }); }
+}
+
+async function addCatFromModal() {
+  const name = document.getElementById("cat-modal-new").value.trim();
+  if (!name) return;
+  try {
+    const r = await fetch("/api/categories", { method:"POST", headers:{"Content-Type":"application/json"}, body:JSON.stringify({name}) });
+    const d = await r.json();
+    if (d.ok) {
+      document.getElementById("cat-modal-new").value = "";
+      document.getElementById("cat-modal-list").innerHTML += "<label style=\"display:flex;align-items:center;gap:8px;padding:6px 0;cursor:pointer;\"><input type=\"checkbox\" value=\"\""+name+"\"\" checked onchange=\"toggleModalCat(this)\">"+name+"</label>";
+      if (!pendingSelectedCats.includes(name)) pendingSelectedCats.push(name);
+      toast("分类已添加");
+    } else toast("添加失败", true);
+  } catch(e) { toast("添加失败", true); }
+}
+
+function closeCatModal() {
+  document.getElementById("cat-modal").classList.add("hidden");
+  pendingUploadFile = null;
+  pendingSelectedCats = [];
+}
+
+async function confirmUploadDoc() {
+  const file = pendingUploadFile;
+  if (!file) return;
+  const f = new FormData();
+  f.append("file", file);
+  f.append("categories", JSON.stringify(pendingSelectedCats));
+  document.getElementById("cat-modal").classList.add("hidden");
+  try {
+    const r = await fetch("/api/upload/doc", { method:"POST", body:f });
+    const d = await r.json();
+    if (d.ok) { toast("已导入："+d.title); loadPosts(); }
+    else toast("导入失败", true);
+  } catch(e) { toast("导入失败", true); }
+  pendingUploadFile = null;
+  pendingSelectedCats = [];
 }
 </script>
 </body>

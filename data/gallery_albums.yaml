@@ -1,0 +1,4 @@
+albums:
+  - name: 默认相册
+    slug: default
+    description: 默认相册
